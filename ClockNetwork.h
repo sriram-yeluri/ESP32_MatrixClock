@@ -1,14 +1,14 @@
 /******************************************************************************
  * Project      : ESP32 Matrix Clock Professional
  *
- * File         : NetworkManager.h
+ * File         : ClockNetwork.h
  *
  * Description:
  * WiFi and NTP network service.
  ******************************************************************************/
 
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef CLOCK_NETWORK_H
+#define CLOCK_NETWORK_H
 
 
 #include <Arduino.h>
@@ -26,16 +26,11 @@
 
 
 
-class NetworkManager
+class ClockNetwork
 {
 
 public:
-
-
-    explicit Network(
-        Settings& settings
-    );
-
+    explicit ClockNetwork(Settings& settings);
 
 
     /*

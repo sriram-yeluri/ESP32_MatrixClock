@@ -1,17 +1,18 @@
 /******************************************************************************
  * Project      : ESP32 Matrix Clock Professional
  *
- * File         : MessageManager.cpp
+ * File         : PageManager.cpp
  ******************************************************************************/
 
-#include "include/MessageManager.h"
+#include "PageManager.h"
+
 
 
 /******************************************************************************
  * Constructor
  ******************************************************************************/
 
-MessageManager::MessageManager()
+PageManager::PageManager()
 
 :
 m_count(0),
@@ -30,25 +31,93 @@ m_lastChange(0)
  * Begin
  ******************************************************************************/
 
-void MessageManager::begin()
+void PageManager::begin()
 {
 
-    add(
-        "Welcome",
+    m_pages[m_count++] =
+    {
+
+        PageType::Time,
+
+        true,
+
+        10
+
+    };
+
+
+
+    m_pages[m_count++] =
+    {
+
+        PageType::Date,
+
+        true,
+
+        10
+
+    };
+
+
+
+    m_pages[m_count++] =
+    {
+
+        PageType::Day,
+
+        true,
+
+        10
+
+    };
+
+
+
+    m_pages[m_count++] =
+    {
+
+        PageType::Message,
+
+        true,
+
+        15
+
+    };
+
+
+
+    /*
+     * Future pages
+     */
+
+    m_pages[m_count++] =
+    {
+
+        PageType::Version,
+
+        false,
+
         5
-    );
+
+    };
 
 
-    add(
-        "ESP32 Matrix Clock",
+
+    m_pages[m_count++] =
+    {
+
+        PageType::WiFi,
+
+        false,
+
         5
-    );
+
+    };
 
 
-    add(
-        "Have A Nice Day",
-        5
-    );
+    m_lastChange =
+        millis();
+
 
 }
 
@@ -58,7 +127,7 @@ void MessageManager::begin()
  * Update
  ******************************************************************************/
 
-void MessageManager::update()
+void PageManager::update()
 {
 
     if(
@@ -81,7 +150,7 @@ void MessageManager::update()
 
         >=
 
-        m_messages[m_current].duration * 1000UL
+        m_pages[m_current].duration * 1000UL
 
     )
     {
@@ -99,22 +168,14 @@ void MessageManager::update()
 
 
 /******************************************************************************
- * Current
+ * Current Page
  ******************************************************************************/
 
-const char* MessageManager::current() const
+PageType PageManager::current() const
 {
 
-    if(
-        m_count == 0
-    )
-    {
-        return "";
-    }
-
-
     return
-        m_messages[m_current].text;
+        m_pages[m_current].page;
 
 }
 
@@ -124,20 +185,24 @@ const char* MessageManager::current() const
  * Next
  ******************************************************************************/
 
-void MessageManager::next()
+void PageManager::next()
 {
 
     selectNext();
+
+
+    m_lastChange =
+        millis();
 
 }
 
 
 
 /******************************************************************************
- * Select next enabled message
+ * Find next enabled page
  ******************************************************************************/
 
-void MessageManager::selectNext()
+void PageManager::selectNext()
 {
 
     if(
@@ -158,7 +223,6 @@ void MessageManager::selectNext()
     )
     {
 
-
         m_current++;
 
 
@@ -166,13 +230,15 @@ void MessageManager::selectNext()
             m_current >= m_count
         )
         {
+
             m_current = 0;
+
         }
 
 
 
         if(
-            m_messages[m_current].enabled
+            m_pages[m_current].enabled
         )
         {
             break;
@@ -185,99 +251,93 @@ void MessageManager::selectNext()
 
 
 /******************************************************************************
- * Add
+ * Select page
  ******************************************************************************/
 
-bool MessageManager::add(
+void PageManager::set(
+    PageType page
+)
+{
 
-    const char* text,
+    for(
+        uint8_t i = 0;
 
-    uint16_t seconds
+        i < m_count;
+
+        i++
+    )
+    {
+
+        if(
+            m_pages[i].page == page
+        )
+        {
+
+            m_current =
+                i;
+
+
+            m_lastChange =
+                millis();
+
+
+            return;
+
+        }
+
+    }
+
+}
+
+
+
+/******************************************************************************
+ * Enable Page
+ ******************************************************************************/
+
+void PageManager::enable(
+
+    PageType page,
+
+    bool state
 
 )
 {
 
-    if(
-        m_count >=
-        Constants::Limits::MaximumMessages
+    for(
+        uint8_t i = 0;
+
+        i < m_count;
+
+        i++
     )
     {
-        return false;
+
+        if(
+            m_pages[i].page == page
+        )
+        {
+
+            m_pages[i].enabled =
+                state;
+
+
+            if(
+                !state
+                &&
+                i == m_current
+            )
+            {
+                selectNext();
+                m_lastChange =
+                    millis();
+            }
+
+
+            return;
+
+        }
+
     }
 
-
-
-    DisplayMessage& msg =
-        m_messages[m_count];
-
-
-
-    strlcpy(
-
-        msg.text,
-
-        text,
-
-        sizeof(msg.text)
-
-    );
-
-
-
-    msg.enabled =
-        true;
-
-
-    msg.duration =
-        seconds;
-
-
-    msg.type =
-        MessageType::Normal;
-
-
-
-    m_count++;
-
-
-
-    return true;
-
-}
-
-
-
-/******************************************************************************
- * Clear
- ******************************************************************************/
-
-void MessageManager::clear()
-{
-
-    m_count =
-        0;
-
-
-    m_current =
-        0;
-
-
-    m_lastChange =
-        0;
-
-
-    m_current =
-        0;
-
-}
-
-
-
-/******************************************************************************
- * Count
- ******************************************************************************/
-
-uint8_t MessageManager::count() const
-{
-    return m_count;
 }

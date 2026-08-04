@@ -15,18 +15,18 @@
  *
  ******************************************************************************/
 
-#include "include/Config.h"
-#include "include/Constants.h"
-#include "include/Types.h"
-#include "include/Version.h"
+#include "Config.h"
+#include "Constants.h"
+#include "Types.h"
+#include "Version.h"
 
 
-#include "include/Settings.h"
-#include "include/NetworkManager.h"
-#include "include/Clock.h"
-#include "include/Display.h"
-#include "include/MessageManager.h"
-#include "include/PageManager.h"
+#include "Settings.h"
+#include "ClockNetwork.h"
+#include "Clock.h"
+#include "Display.h"
+#include "MessageManager.h"
+#include "PageManager.h"
 
 
 /******************************************************************************
@@ -36,7 +36,7 @@
 Settings settings;
 
 
-NetworkManager network(
+ClockNetwork network(
     settings
 );
 
