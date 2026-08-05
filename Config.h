@@ -27,7 +27,7 @@ constexpr char SSID[] =
 
 
 constexpr char PASSWORD[] =
-    "xxxxx";
+    "SmartKids@2024";
 
 
 constexpr char HOSTNAME[] =
