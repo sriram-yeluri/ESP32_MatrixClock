@@ -33,67 +33,30 @@ m_lastChange(0)
 void MessageManager::begin()
 {
 
-    add(
-        "Welcome",
-        5
-    );
+    add("Welcome Home ...!",5);
+    add("ESP32 Matrix Clock",5);
+    add("Have A Nice Day",5);
+    add("VijayKrishnaSai is a smart kid",5);
+    add("Vishwateja is a naughty kid", 5);
+    add("Devaki Devi is the Queen of our House", 5);
 
-
-    add(
-        "ESP32 Matrix Clock",
-        5
-    );
-
-
-    add(
-        "Have A Nice Day",
-        5
-    );
+    // Start with the first message.
+    m_current = 0;
 
 }
 
-
-
 /******************************************************************************
  * Update
+ *
+ * Message rotation is now controlled by PageManager.
  ******************************************************************************/
 
 void MessageManager::update()
 {
-
-    if(
-        m_count == 0
-    )
-    {
-        return;
-    }
-
-
-
-    uint32_t now =
-        millis();
-
-
-
-    if(
-
-        now - m_lastChange
-
-        >=
-
-        m_messages[m_current].duration * 1000UL
-
-    )
-    {
-
-        next();
-
-
-        m_lastChange =
-            now;
-
-    }
-
+    // Intentionally empty.
+    //
+    // The application advances to the next message only when the
+    // Message page becomes active.
 }
 
 
@@ -126,6 +89,9 @@ const char* MessageManager::current() const
 
 void MessageManager::next()
 {
+
+    if (m_count == 0)
+        return;
 
     selectNext();
 

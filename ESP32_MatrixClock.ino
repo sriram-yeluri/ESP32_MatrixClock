@@ -119,7 +119,6 @@ void loop()
     if (firstRender || current != lastPage)
     {
         renderPage();
-
         lastPage = current;
         firstRender = false;
     }
@@ -167,22 +166,15 @@ void renderPage()
 
         case PageType::Day:
 
-            display.showDay(
-
-                clockService.getDay()
-
-            );
-
+            display.showDay( clockService.getDay());
             break;
 
         case PageType::Message:
-
-            display.showMessage(
-
-                messages.current()
-            );
-
+        {
+            display.showMessage(messages.current());
+            messages.next();
             break;
+        }
 
         case PageType::Version:
 
