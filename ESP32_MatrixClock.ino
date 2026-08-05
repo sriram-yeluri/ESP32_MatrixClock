@@ -26,6 +26,7 @@
 #include "Display.h"
 #include "MessageManager.h"
 #include "PageManager.h"
+#include "DisplayScheduler.h"
 
 
 /******************************************************************************
@@ -34,21 +35,21 @@
 
 Settings settings;
 
-ClockNetwork network(
-    settings
-);
+ClockNetwork network(settings);
 
-Clock clockService(
-    settings
-);
+Clock clockService(settings);
 
-Display display(
-    settings
-);
+Display display(settings);
 
 MessageManager messages;
 
 PageManager pages;
+
+DisplayScheduler scheduler(
+    display,
+    pages,
+    clockService,
+    messages);
 
 /******************************************************************************
  * Setup
@@ -56,26 +57,19 @@ PageManager pages;
 
 void setup()
 {
+    scheduler.begin();
 
-    Serial.begin(
-        115200
-    );
+    Serial.begin(115200);
 
     delay(500);
 
     Serial.println();
 
-    Serial.println(
-        Version::Name
-    );
+    Serial.println(Version::Name);
 
-    Serial.print(
-        "Firmware: "
-    );
+    Serial.print("Firmware: ");
 
-    Serial.println(
-        Version::Number
-    );
+    Serial.println(Version::Number);
 
     /*
      * Load configuration
@@ -105,34 +99,10 @@ void setup()
 
 void loop()
 {
-    static bool firstRender = true;
-    static PageType lastPage = PageType::Time;
-    static uint32_t lastSecondUpdate = 0;
-
     network.update();
     clockService.update();
     messages.update();
-    pages.update();
-
-    PageType current = pages.current();
-
-    if (firstRender || current != lastPage)
-    {
-        renderPage();
-        lastPage = current;
-        firstRender = false;
-    }
-    else if (current == PageType::Time)
-    {
-        uint32_t now = millis();
-
-        if (now - lastSecondUpdate >= 1000)
-        {
-            lastSecondUpdate = now;
-            display.showTime(clockService.getTime());
-        }
-    }
-
+    scheduler.update();
     display.update();
 }
 
@@ -142,26 +112,15 @@ void loop()
 
 void renderPage()
 {
-    switch(
-        pages.current()
-    )
-
+    switch(pages.current())
     {
         case PageType::Time:
 
-            display.showTime(
-
-                clockService.getTime()
-
-            );
+            display.showTime(clockService.getTime());
             break;
         case PageType::Date:
 
-            display.showDate(
-
-                clockService.getDate()
-
-            );
+            display.showDate(clockService.getDate());
             break;
 
         case PageType::Day:
@@ -172,17 +131,12 @@ void renderPage()
         case PageType::Message:
         {
             display.showMessage(messages.current());
-            messages.next();
             break;
         }
 
         case PageType::Version:
 
-            display.showMessage(
-
-                Version::Number
-
-            );
+            display.showMessage(Version::Number);
             break;
 
         case PageType::WiFi:
@@ -190,16 +144,11 @@ void renderPage()
                 network.isConnected()
             )
             {
-                display.showMessage(
-
-                    "WiFi OK"
-                );
+                display.showMessage("WiFi OK");
             }
             else
             {
-                display.showMessage(
-                    "WiFi OFF"
-                );
+                display.showMessage("WiFi OFF");
 
             }
             break;
@@ -217,10 +166,7 @@ void renderPage()
             break;
 
         default:
-            display.showMessage(
-                "Ready"
-            );
-
+            display.showMessage("Ready");
             break;
     }
 
