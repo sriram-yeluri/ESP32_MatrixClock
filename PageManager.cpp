@@ -7,7 +7,6 @@
 #include "PageManager.h"
 
 
-
 /******************************************************************************
  * Constructor
  ******************************************************************************/
@@ -24,7 +23,6 @@ m_lastChange(0)
 {
 
 }
-
 
 
 /******************************************************************************
@@ -46,7 +44,6 @@ void PageManager::begin()
     };
 
 
-
     m_pages[m_count++] =
     {
 
@@ -57,8 +54,6 @@ void PageManager::begin()
         10
 
     };
-
-
 
     m_pages[m_count++] =
     {
@@ -71,8 +66,6 @@ void PageManager::begin()
 
     };
 
-
-
     m_pages[m_count++] =
     {
 
@@ -83,8 +76,6 @@ void PageManager::begin()
         15
 
     };
-
-
 
     /*
      * Future pages
@@ -101,8 +92,6 @@ void PageManager::begin()
 
     };
 
-
-
     m_pages[m_count++] =
     {
 
@@ -114,14 +103,10 @@ void PageManager::begin()
 
     };
 
-
     m_lastChange =
         millis();
 
-
 }
-
-
 
 /******************************************************************************
  * Update
@@ -137,12 +122,8 @@ void PageManager::update()
         return;
     }
 
-
-
     uint32_t now =
         millis();
-
-
 
     if(
 
@@ -164,7 +145,6 @@ void PageManager::update()
     }
 
 }
-
 
 
 /******************************************************************************
@@ -196,8 +176,6 @@ void PageManager::next()
 
 }
 
-
-
 /******************************************************************************
  * Find next enabled page
  ******************************************************************************/
@@ -211,8 +189,6 @@ void PageManager::selectNext()
     {
         return;
     }
-
-
 
     for(
         uint8_t i = 0;
@@ -234,8 +210,6 @@ void PageManager::selectNext()
             m_current = 0;
 
         }
-
-
 
         if(
             m_pages[m_current].enabled

@@ -74,7 +74,6 @@ public:
     );
 
 
-
     /*
      * Brightness.
      */
@@ -82,7 +81,6 @@ public:
     void setBrightness(
         uint8_t value
     );
-
 
     uint8_t brightness() const;
 
@@ -98,32 +96,21 @@ public:
 
 private:
 
-
     void render(
         const char* text,
         textPosition_t position,
         textEffect_t effect
     );
 
-
-
     Settings& m_settings;
 
-
-
     MD_Parola m_display;
-
-
 
     char m_currentText[
         Constants::Buffer::MessageSize
     ];
 
-
-
     uint8_t m_brightness;
-
-
 
 };
 

@@ -38,8 +38,6 @@ struct DisplayMessage
 };
 
 
-
-
 class MessageManager
 {
 
@@ -48,14 +46,10 @@ public:
 
     MessageManager();
 
-
-
     /*
      * Initialize messages.
      */
     void begin();
-
-
 
     /*
      * Background update.
@@ -63,20 +57,15 @@ public:
     void update();
 
 
-
     /*
      * Current message.
      */
     const char* current() const;
 
-
-
     /*
      * Move next message.
      */
     void next();
-
-
 
     /*
      * Add new message.
@@ -90,44 +79,26 @@ public:
 
     );
 
-
-
     /*
      * Remove all.
      */
     void clear();
 
-
-
     uint8_t count() const;
 
-
-
 private:
-
-
     void selectNext();
-
-
 
     DisplayMessage m_messages[
         Constants::Limits::MaximumMessages
     ];
 
-
-
     uint8_t m_count;
-
 
     uint8_t m_current;
 
-
     uint32_t m_lastChange;
 
-
-
 };
-
-
 
 #endif

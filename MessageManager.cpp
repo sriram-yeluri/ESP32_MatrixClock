@@ -182,8 +182,6 @@ void MessageManager::selectNext()
 
 }
 
-
-
 /******************************************************************************
  * Add
  ******************************************************************************/
@@ -206,10 +204,8 @@ bool MessageManager::add(
     }
 
 
-
     DisplayMessage& msg =
         m_messages[m_count];
-
 
 
     strlcpy(
@@ -222,30 +218,20 @@ bool MessageManager::add(
 
     );
 
-
-
     msg.enabled =
         true;
-
 
     msg.duration =
         seconds;
 
-
     msg.type =
         MessageType::Normal;
 
-
-
     m_count++;
-
-
 
     return true;
 
 }
-
-
 
 /******************************************************************************
  * Clear
@@ -270,8 +256,6 @@ void MessageManager::clear()
         0;
 
 }
-
-
 
 /******************************************************************************
  * Count

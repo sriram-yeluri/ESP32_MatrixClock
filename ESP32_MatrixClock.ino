@@ -20,7 +20,6 @@
 #include "Types.h"
 #include "Version.h"
 
-
 #include "Settings.h"
 #include "ClockNetwork.h"
 #include "Clock.h"
@@ -35,28 +34,21 @@
 
 Settings settings;
 
-
 ClockNetwork network(
     settings
 );
-
 
 Clock clockService(
     settings
 );
 
-
 Display display(
     settings
 );
 
-
 MessageManager messages;
 
-
 PageManager pages;
-
-
 
 /******************************************************************************
  * Setup
@@ -69,29 +61,21 @@ void setup()
         115200
     );
 
-
     delay(500);
 
-
-
     Serial.println();
-
 
     Serial.println(
         Version::Name
     );
 
-
     Serial.print(
         "Firmware: "
     );
 
-
     Serial.println(
         Version::Number
     );
-
-
 
     /*
      * Load configuration
@@ -99,27 +83,15 @@ void setup()
 
     settings.begin();
 
-
-
     /*
      * Initialize hardware/services
      */
 
     display.begin();
-
-
     network.begin();
-
-
     clockService.begin();
-
-
     messages.begin();
-
-
     pages.begin();
-
-
 
     Serial.println(
         "System Ready"
@@ -127,51 +99,43 @@ void setup()
 
 }
 
-
-
 /******************************************************************************
  * Main Loop
  ******************************************************************************/
 
 void loop()
 {
-
-    /*
-     * Background services
-     */
+    static bool firstRender = true;
+    static PageType lastPage = PageType::Time;
+    static uint32_t lastSecondUpdate = 0;
 
     network.update();
-
-
     clockService.update();
-
-
     messages.update();
-
-
     pages.update();
 
+    PageType current = pages.current();
 
+    if (firstRender || current != lastPage)
+    {
+        renderPage();
 
-    /*
-     * Display animation
-     */
+        lastPage = current;
+        firstRender = false;
+    }
+    else if (current == PageType::Time)
+    {
+        uint32_t now = millis();
+
+        if (now - lastSecondUpdate >= 1000)
+        {
+            lastSecondUpdate = now;
+            display.showTime(clockService.getTime());
+        }
+    }
 
     display.update();
-
-
-
-    /*
-     * Render selected page
-     */
-
-    renderPage();
-
-
-
 }
-
-
 
 /******************************************************************************
  * Display Page Renderer
@@ -179,15 +143,11 @@ void loop()
 
 void renderPage()
 {
-
     switch(
         pages.current()
     )
 
     {
-
-
-
         case PageType::Time:
 
             display.showTime(
@@ -195,11 +155,7 @@ void renderPage()
                 clockService.getTime()
 
             );
-
             break;
-
-
-
         case PageType::Date:
 
             display.showDate(
@@ -207,10 +163,7 @@ void renderPage()
                 clockService.getDate()
 
             );
-
             break;
-
-
 
         case PageType::Day:
 
@@ -222,19 +175,14 @@ void renderPage()
 
             break;
 
-
-
         case PageType::Message:
 
             display.showMessage(
 
                 messages.current()
-
             );
 
             break;
-
-
 
         case PageType::Version:
 
@@ -243,46 +191,30 @@ void renderPage()
                 Version::Number
 
             );
-
             break;
 
-
-
         case PageType::WiFi:
-
-
             if(
                 network.isConnected()
             )
             {
-
                 display.showMessage(
 
                     "WiFi OK"
-
                 );
-
             }
             else
             {
-
                 display.showMessage(
-
                     "WiFi OFF"
-
                 );
 
             }
-
-
             break;
-
-
 
         case PageType::IP:
 
             display.showMessage(
-
                 network.status()
                        .ip
                        .toString()
@@ -292,20 +224,12 @@ void renderPage()
 
             break;
 
-
-
         default:
-
-
             display.showMessage(
-
                 "Ready"
-
             );
 
-
             break;
-
     }
 
 }

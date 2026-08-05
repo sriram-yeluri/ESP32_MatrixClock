@@ -23,19 +23,17 @@ namespace WiFi
 {
 
 constexpr char SSID[] =
-    "YOUR_WIFI_NAME";
+    "yeluris";
 
 
 constexpr char PASSWORD[] =
-    "YOUR_WIFI_PASSWORD";
+    "xxxxxxx";
 
 
 constexpr char HOSTNAME[] =
     "ESP32-MatrixClock";
 
 }
-
-
 
 namespace Time
 {

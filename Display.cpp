@@ -6,12 +6,10 @@
 
 #include "Display.h"
 
-
 namespace
 {
 
-constexpr uint16_t ScrollSpeed =
-    Constants::Display::DefaultScrollSpeed;
+    constexpr uint16_t ScrollSpeed = Constants::Display::DefaultScrollSpeed;
 
 }
 
@@ -58,8 +56,6 @@ m_display(
 
 }
 
-
-
 /******************************************************************************
  * Begin
  ******************************************************************************/
@@ -69,24 +65,17 @@ void Display::begin()
 
     m_display.begin();
 
-
     m_display.setIntensity(
         m_brightness
     );
 
-
     m_display.displayClear();
-
-
 
     m_display.setTextAlignment(
         PA_CENTER
     );
 
-
-
 }
-
 
 
 /******************************************************************************
@@ -95,12 +84,8 @@ void Display::begin()
 
 void Display::update()
 {
-
     m_display.displayAnimate();
-
 }
-
-
 
 /******************************************************************************
  * Internal renderer
@@ -113,28 +98,11 @@ void Display::render(
 )
 {
 
-
-    if(
-        strcmp(
-            text,
-            m_currentText
-        )
-        ==
-        0
-    )
-    {
-        return;
-    }
-
-
-
     strlcpy(
         m_currentText,
         text,
         sizeof(m_currentText)
     );
-
-
 
     m_display.displayText(
 
@@ -160,23 +128,14 @@ void Display::render(
  * Time
  ******************************************************************************/
 
-void Display::showTime(
-    const char* text
-)
+void Display::showTime(const char* text)
 {
-
-    render(
-
-        text,
-
-        PA_CENTER,
-
-        PA_PRINT
-
-    );
-
+    
+    m_display.displayClear();
+    // m_display.print(text);    // or equivalent static rendering
+    render(text, PA_CENTER, PA_NO_EFFECT );
+    m_display.displayReset();
 }
-
 
 
 /******************************************************************************
@@ -268,20 +227,14 @@ void Display::setBrightness(
 
     }
 
-
-
     m_brightness =
         value;
-
-
 
     m_display.setIntensity(
         value
     );
 
 }
-
-
 
 /******************************************************************************
  * Brightness getter
@@ -291,8 +244,6 @@ uint8_t Display::brightness() const
 {
     return m_brightness;
 }
-
-
 
 /******************************************************************************
  * Clear

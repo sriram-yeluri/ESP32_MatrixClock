@@ -175,7 +175,7 @@ void Clock::refresh()
         strftime(
             m_timeBuffer,
             sizeof(m_timeBuffer),
-            "%H:%M",
+            "%H:%M:%S",
             &m_time
         );
 
@@ -186,14 +186,15 @@ void Clock::refresh()
         strftime(
             m_timeBuffer,
             sizeof(m_timeBuffer),
-            "%I:%M %p",
+            "%I:%M:%S %p",
             &m_time
         );
 
 
     }
 
-
+// for 24 hour time : "%I:%M %p"
+// for 12 hour time : "%I:%M:%S %p"
 
     strftime(
         m_secondsBuffer,
