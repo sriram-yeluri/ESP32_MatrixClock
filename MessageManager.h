@@ -79,12 +79,24 @@ public:
 
     );
 
+    bool loadFromStorage();
+    bool saveToStorage() const;
+    bool updateAt(uint8_t index, const char* text, uint16_t seconds, bool priority = false);
+    bool pinAt(uint8_t index, bool priority);
+
+    /*
+     * Remove one message.
+     */
+    bool remove(uint8_t index);
+
     /*
      * Remove all.
      */
     void clear();
 
     uint8_t count() const;
+
+    const char* get(uint8_t index) const;
 
 private:
     void selectNext();

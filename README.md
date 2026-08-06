@@ -197,3 +197,8 @@ void loop()
 }
 ```
 
+### Access-point fallback added
+If the ESP32 cannot connect to your home Wi‑Fi, it will now start its own access point so you can still open the web interface directly.
+
+Network name : ESP32-MatrixClock
+Password : matrixclock

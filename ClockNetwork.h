@@ -13,6 +13,7 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <WebServer.h>
 
 // This bridges old libraries with ESP32 Core 3.x.
 #ifndef wifi_event_id_t
@@ -69,7 +70,7 @@ private:
 
 
     void connect();
-
+    void startAccessPoint();
 
     void syncTime();
 
@@ -94,6 +95,11 @@ private:
 
     uint32_t m_lastSyncAttempt;
 
+    WebServer m_webServer;
+    bool m_apMode;
+
+    void handleSetupPage();
+    void handleRoot();
 };
 
 
