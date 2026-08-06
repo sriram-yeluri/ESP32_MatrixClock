@@ -11,7 +11,9 @@ ClockNetwork::ClockNetwork(Settings& settings)
     : m_settings(settings),
       m_lastReconnect(0),
       m_lastStatusUpdate(0),
-      m_lastSyncAttempt(0)
+      m_lastSyncAttempt(0),
+      m_webServer(80),
+      m_apMode(false)
 {
     m_status.state = NetworkState::Disconnected;
     m_status.connected = false;
@@ -32,6 +34,8 @@ bool ClockNetwork::begin()
 void ClockNetwork::connect()
 {
     Serial.println("Connecting to WiFi...");
+    Serial.print("SSID: ");
+    Serial.println(m_settings.wifiSSID());
 
     m_status.state = NetworkState::Connecting;
 
@@ -39,10 +43,57 @@ void ClockNetwork::connect()
         m_settings.wifiSSID(),
         m_settings.wifiPassword()
     );
+
+    unsigned long start = millis();
+    while (millis() - start < 8000)
+    {
+        if (WiFi.status() == WL_CONNECTED)
+        {
+            return;
+        }
+        delay(100);
+    }
+
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        Serial.println("WiFi connection failed, starting access point...");
+        startAccessPoint();
+    }
+}
+
+void ClockNetwork::startAccessPoint()
+{
+    WiFi.disconnect(true);
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP("ESP32-MatrixClock", "matrixclock");
+
+    IPAddress apIP = WiFi.softAPIP();
+    m_status.ip = apIP;
+    m_status.connected = true;
+    m_status.state = NetworkState::Connected;
+    m_apMode = true;
+
+    m_webServer.on("/", HTTP_GET, [this]() { handleRoot(); });
+    m_webServer.begin();
+
+    Serial.println("Access Point ready.");
+    Serial.print("AP IP: ");
+    Serial.println(apIP);
+}
+
+void ClockNetwork::handleRoot()
+{
+    String html = "<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>ESP32 Matrix Clock</title><style>body{font-family:Arial,sans-serif;background:#0f172a;color:#f8fafc;margin:0;padding:20px;line-height:1.5}div{background:#111827;padding:16px;border-radius:12px;max-width:480px;margin:auto}h2{margin-top:0}p{color:#cbd5e1}a{color:#38bdf8}</style></head><body><div><h2>ESP32 Matrix Clock</h2><p>Your clock is running in setup mode.</p><p>Connect this device to your Wi-Fi network, then open the message editor page at the device IP address.</p><p>Default access point: <b>ESP32-MatrixClock</b></p><p>Password: <b>matrixclock</b></p></div></body></html>";
+    m_webServer.send(200, "text/html", html);
 }
 
 void ClockNetwork::update()
 {
+    if (m_apMode)
+    {
+        m_webServer.handleClient();
+    }
+
     uint32_t now = millis();
 
     if (WiFi.status() != WL_CONNECTED)
@@ -60,8 +111,16 @@ void ClockNetwork::update()
         return;
     }
 
-    m_status.connected = true;
-    m_status.state = NetworkState::Connected;
+    if (!m_status.connected)
+    {
+        m_status.connected = true;
+        m_status.state = NetworkState::Connected;
+        refreshStatus();
+
+        Serial.println("WiFi connected.");
+        Serial.print("IP address: ");
+        Serial.println(m_status.ip.toString());
+    }
 
     if (!m_status.timeSynced)
     {

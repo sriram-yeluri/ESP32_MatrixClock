@@ -148,3 +148,81 @@ Constants: k prefix (kDefaultBrightness)
 Enums: enum class only
 One class per .h/.cpp pair
 No logic in .ino beyond initialization and the main update loop
+
+### Class Diagram
+
+                    Clock
+                       │
+                       ▼
+               ClockRenderer
+                       │
+               uses DisplayDriver
+                       │
+                       ▼
+                DisplayDriver
+                 │          │
+                 ▼          ▼
+            MD_MAX72XX   MD_Parola
+
+
+DisplayScheduler
+
+↓
+
+ClockRenderer
+
+↓
+
+Display
+
+### Layered Architecture
+
+Application Layer
+──────────────────────────
+ClockRenderer
+AnimationRenderer
+
+Logic Layer
+──────────────────────────
+DisplayScheduler
+PageManager
+MessageManager
+Clock
+
+Hardware Layer
+──────────────────────────
+Display
+ClockNetwork
+
+HAL
+──────────────────────────
+MD_MAX72XX
+MD_Parola
+WiFi
+ESP32
+
+### Workflow
+                REQUIREMENT
+                     │
+                     ▼
+              Architecture Review
+                     │
+                     ▼
+              Design Discussion
+                     │
+                     ▼
+             Small Safe Commit
+                     │
+                     ▼
+          Arduino IDE Compilation
+                     │
+                     ▼
+             ESP32 Runtime Test
+                     │
+                     ▼
+                Git Commit
+                     │
+                     ▼
+               Next Requirement
+That loop is simple, disciplined, and sustainable.
+

@@ -27,6 +27,7 @@
 #include "MessageManager.h"
 #include "PageManager.h"
 #include "DisplayScheduler.h"
+#include "MessageWebServer.h"
 
 
 /******************************************************************************
@@ -50,6 +51,8 @@ DisplayScheduler scheduler(
     pages,
     clockService,
     messages);
+
+MessageWebServer webServer(messages);
 
 /******************************************************************************
  * Setup
@@ -85,6 +88,7 @@ void setup()
     network.begin();
     clockService.begin();
     messages.begin();
+    webServer.begin();
     pages.begin();
 
     Serial.println(
@@ -102,6 +106,7 @@ void loop()
     network.update();
     clockService.update();
     messages.update();
+    webServer.update();
     pages.update();
     scheduler.update();
     display.update();

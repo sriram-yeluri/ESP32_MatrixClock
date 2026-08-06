@@ -130,11 +130,17 @@ void Display::render(
 
 void Display::showTime(const char* text)
 {
-    
-    m_display.displayClear();
-    // m_display.print(text);    // or equivalent static rendering
-    render(text, PA_CENTER, PA_NO_EFFECT );
-    m_display.displayReset();
+    if (text == nullptr)
+    {
+        return;
+    }
+
+    if (strcmp(text, m_currentText) == 0)
+    {
+        return;
+    }
+
+    render(text, PA_CENTER, PA_NO_EFFECT);
 }
 
 
@@ -142,23 +148,10 @@ void Display::showTime(const char* text)
  * Date
  ******************************************************************************/
 
-void Display::showDate(
-    const char* text
-)
+void Display::showDate(const char* text)
 {
-
-    render(
-
-        text,
-
-        PA_CENTER,
-
-        PA_SCROLL_LEFT
-
-    );
-
+    render(text,PA_CENTER,PA_SCROLL_LEFT);
 }
-
 
 
 /******************************************************************************
