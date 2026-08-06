@@ -102,6 +102,7 @@ void loop()
     network.update();
     clockService.update();
     messages.update();
+    pages.update();
     scheduler.update();
     display.update();
 }
