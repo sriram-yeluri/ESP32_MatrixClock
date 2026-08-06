@@ -59,6 +59,11 @@ public:
     );
 
 
+    void showSeconds(
+        const char* text
+    );
+
+
     void showDate(
         const char* text
     );
@@ -96,7 +101,8 @@ public:
 
 private:
 
-    void render(
+    void renderZone(
+        uint8_t zone,
         const char* text,
         textPosition_t position,
         textEffect_t effect
@@ -109,6 +115,16 @@ private:
     char m_currentText[
         Constants::Buffer::MessageSize
     ];
+
+    char m_clockText[
+        Constants::Buffer::TimeSize
+    ];
+
+    char m_secondsText[
+        8
+    ];
+
+    bool m_threeZoneLayout;
 
     uint8_t m_brightness;
 

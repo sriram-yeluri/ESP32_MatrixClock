@@ -21,7 +21,7 @@ namespace Config
 namespace WiFi
 {
     constexpr char SSID[] = "yeluris";
-    constexpr char PASSWORD[] = "x";
+    constexpr char PASSWORD[] = "xxx";
     constexpr char HOSTNAME[] = "ESP32-MatrixClock";
 }
 
