@@ -107,69 +107,29 @@ void MessageManager::next()
 
 void MessageManager::selectNext()
 {
+    if (m_count == 0) return;
 
-    if(
-        m_count == 0
-    )
+    // Priority pass: advance to the next pinned message if one exists
+    for (uint8_t i = 0; i < m_count; ++i)
     {
-        return;
-    }
-
-    uint8_t start = m_current;
-    bool foundPriority = false;
-
-    for(
-        uint8_t i = 0;
-
-        i < m_count;
-
-        i++
-    )
-    {
-
-        m_current++;
-
-
-        if(
-            m_current >= m_count
-        )
+        uint8_t candidate = (m_current + 1 + i) % m_count;
+        if (m_messages[candidate].enabled && m_messages[candidate].type == MessageType::Priority)
         {
-            m_current = 0;
-        }
-
-        if(
-            m_messages[m_current].enabled
-            && m_messages[m_current].type == MessageType::Priority
-        )
-        {
-            foundPriority = true;
-            break;
-        }
-
-        if (m_current == start)
-        {
-            break;
+            m_current = candidate;
+            return;
         }
     }
 
-    if (!foundPriority)
+    // Fallback pass: advance to the next enabled message
+    for (uint8_t i = 0; i < m_count; ++i)
     {
-        m_current = start;
-        for (uint8_t i = 0; i < m_count; ++i)
+        uint8_t candidate = (m_current + 1 + i) % m_count;
+        if (m_messages[candidate].enabled)
         {
-            m_current++;
-            if (m_current >= m_count)
-            {
-                m_current = 0;
-            }
-
-            if (m_messages[m_current].enabled)
-            {
-                break;
-            }
+            m_current = candidate;
+            return;
         }
     }
-
 }
 
 /******************************************************************************

@@ -60,8 +60,6 @@ MessageWebServer webServer(messages);
 
 void setup()
 {
-    scheduler.begin();
-
     Serial.begin(115200);
 
     delay(500);
@@ -84,6 +82,7 @@ void setup()
      * Initialize hardware/services
      */
 
+    scheduler.begin();
     display.begin();
     network.begin();
     clockService.begin();
@@ -110,70 +109,4 @@ void loop()
     pages.update();
     scheduler.update();
     display.update();
-}
-
-/******************************************************************************
- * Display Page Renderer
- ******************************************************************************/
-
-void renderPage()
-{
-    switch(pages.current())
-    {
-        case PageType::Time:
-
-            display.showTime(clockService.getTime());
-            break;
-        case PageType::Date:
-
-            display.showDate(clockService.getDate());
-            break;
-
-        case PageType::Day:
-
-            display.showDay( clockService.getDay());
-            break;
-
-        case PageType::Message:
-        {
-            display.showMessage(messages.current());
-            break;
-        }
-
-        case PageType::Version:
-
-            display.showMessage(Version::Number);
-            break;
-
-        case PageType::WiFi:
-            if(
-                network.isConnected()
-            )
-            {
-                display.showMessage("WiFi OK");
-            }
-            else
-            {
-                display.showMessage("WiFi OFF");
-
-            }
-            break;
-
-        case PageType::IP:
-
-            display.showMessage(
-                network.status()
-                       .ip
-                       .toString()
-                       .c_str()
-
-            );
-
-            break;
-
-        default:
-            display.showMessage("Ready");
-            break;
-    }
-
 }

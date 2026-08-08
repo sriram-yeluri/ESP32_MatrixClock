@@ -59,12 +59,12 @@ void Display::begin()
 
     m_display.displayClear();
 
-    if (deviceCount < 2)
+    if (zoneCount == 1)
     {
         m_threeZoneLayout = false;
         m_display.setZone(0, 0, 0);
     }
-    else if (deviceCount >= 8)
+    else if (zoneCount == 3)
     {
         m_threeZoneLayout = true;
 
@@ -114,82 +114,34 @@ void Display::renderZone(
 )
 {
     if (text == nullptr)
-    {
         return;
-    }
 
-    if ((zone == 0 && !m_threeZoneLayout) || (zone == 2 && m_threeZoneLayout))
+    const bool isClockZone   = (zone == 0 && !m_threeZoneLayout) || (zone == 2 && m_threeZoneLayout);
+    const bool isSecondsZone = (zone == 1 && m_threeZoneLayout);
+
+    if (isClockZone)
     {
-        if (strcmp(m_clockText, text) == 0)
-        {
-            return;
-        }
-        strlcpy(m_clockText,text,sizeof(m_clockText));
+        if (strcmp(m_clockText, text) == 0) return;
+        strlcpy(m_clockText, text, sizeof(m_clockText));
     }
-    else if (zone == 1 && m_threeZoneLayout)
+    else if (isSecondsZone)
     {
-        if (strcmp(m_secondsText, text) == 0)
-        {
-            return;
-        }
-        strlcpy(m_secondsText,text,sizeof(m_secondsText));
+        if (strcmp(m_secondsText, text) == 0) return;
+        strlcpy(m_secondsText, text, sizeof(m_secondsText));
     }
     else
     {
-        strlcpy(
-            m_currentText,text,sizeof(m_currentText));
+        strlcpy(m_currentText, text, sizeof(m_currentText));
     }
 
-    if (((zone == 0 || zone == 2) && effect == PA_PRINT) || (zone == 1 && m_threeZoneLayout))
-    {
-        const char* zoneText = m_currentText;
+    const char* zoneText = isClockZone   ? m_clockText
+                         : isSecondsZone ? m_secondsText
+                         : m_currentText;
 
-        if ((zone == 0 && !m_threeZoneLayout) || (zone == 2 && m_threeZoneLayout))
-        {
-            zoneText = m_clockText;
-        }
-        else if (zone == 1 && m_threeZoneLayout)
-        {
-            zoneText = m_secondsText;
-        }
-
-        m_display.displayZoneText(
-            zone,
-            zoneText,
-            position,
-            0,
-            0,
-            PA_PRINT,
-            PA_NO_EFFECT
-        );
-    }
+    if (isClockZone || isSecondsZone || effect == PA_PRINT)
+        m_display.displayZoneText(zone, zoneText, position, 0, 0, PA_PRINT, PA_NO_EFFECT);
     else
-    {
-        if (effect == PA_PRINT)
-        {
-            m_display.displayZoneText(
-                zone,
-                m_currentText,
-                position,
-                0,
-                0,
-                PA_PRINT,
-                PA_NO_EFFECT
-            );
-        }
-        else
-        {
-            m_display.displayZoneText(
-                zone,
-                m_currentText,
-                position,
-                ScrollSpeed,
-                0,
-                effect,
-                effect
-            );
-        }
-    }
+        m_display.displayZoneText(zone, zoneText, position, ScrollSpeed, 0, effect, effect);
 }
 
 
