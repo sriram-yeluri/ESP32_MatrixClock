@@ -267,17 +267,8 @@ void Display::showMessage(
     const char* text
 )
 {
-
     renderZone(
-
-        m_threeZoneLayout ? 0 : 1,
-
-        text,
-
-        PA_LEFT,
-
-        PA_SCROLL_LEFT
-
+        m_threeZoneLayout ? 0 : 1,text, PA_LEFT, PA_SCROLL_LEFT
     );
 
 }
