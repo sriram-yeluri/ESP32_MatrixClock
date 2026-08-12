@@ -49,7 +49,7 @@ m_display(
 void Display::begin()
 {
     const uint8_t deviceCount = Config::Matrix::Devices;
-    const uint8_t zoneCount = (deviceCount >= 8) ? 3 : ((deviceCount >= 2) ? 2 : 1);
+    const uint8_t zoneCount = (deviceCount >= Config::Matrix::ThreeZoneDevices) ? 3 : ((deviceCount >= 2) ? 2 : 1);
 
     m_display.begin(zoneCount);
 
@@ -68,11 +68,13 @@ void Display::begin()
     {
         m_threeZoneLayout = true;
 
-        // Exact 3-zone reference layout for 8 modules:
-        // zone0 = 0..3 (scroll content), zone1 = 4..4 (seconds), zone2 = 5..7 (time)
-        m_display.setZone(0, 0, 3);
-        m_display.setZone(1, 4, 4);
-        m_display.setZone(2, 5, 7);
+        const uint8_t leftEnd = Config::Matrix::ThreeZoneScrollDevices - 1;
+        const uint8_t secondsModule = Config::Matrix::ThreeZoneScrollDevices;
+        const uint8_t rightStart = secondsModule + Config::Matrix::ThreeZoneSecondsDevices;
+
+        m_display.setZone(0, 0, leftEnd);
+        m_display.setZone(1, secondsModule, secondsModule);
+        m_display.setZone(2, rightStart, deviceCount - 1);
 
         m_display.setFont(1, const_cast<MD_MAX72XX::fontType_t*>(numeric7Seg));
         m_display.setFont(2, const_cast<MD_MAX72XX::fontType_t*>(numeric7Se));

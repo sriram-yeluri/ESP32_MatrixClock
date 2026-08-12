@@ -41,6 +41,7 @@ void MessageManager::begin()
         add("VijayKrishnaSai is a smart kid",5);
         add("Vishwateja is a naughty kid", 5);
         add("Devaki Devi is the Queen of our House", 5);
+        add(" Jai Sri Ram *** Jai Sri Ram *** Jai Sri Ram", 5);
         saveToStorage();
     }
 

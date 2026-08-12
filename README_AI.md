@@ -32,7 +32,7 @@ MAX7219 FC16 LED Matrix
 
 Recommended:
 
-8 x 8x8 modules
+16 x 8x8 modules
 
 
 ### Wiring

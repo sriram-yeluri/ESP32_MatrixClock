@@ -27,7 +27,7 @@ ESP32 DevKit (any variant with SPI support)
 
 ### Display
 
-MAX7219 FC16 8×8 LED matrix modules — 8 modules recommended for the full three-zone layout.
+MAX7219 FC16 8×8 LED matrix modules — 16 modules recommended for the full three-zone layout.
 
 ### Wiring
 
@@ -96,7 +96,7 @@ namespace Config
         DataPin   // SPI MOSI — GPIO 23
         ClockPin  // SPI CLK  — GPIO 18
         CSPin     // SPI CS   — GPIO 5
-        Devices   // Number of 8×8 modules (default: 8)
+        Devices   // Number of 8×8 modules (default: 16)
     }
 
     namespace Display
@@ -110,23 +110,25 @@ namespace Config
 
 ## Display Layout
 
-With 8 modules the display is split into three zones:
+With 16 modules the display is split into three zones:
 
 ```
 ┌─────────────────────────────────────────────┐
-│  Zone 0 (modules 0–3)   │ Z1 │ Zone 2 (5–7) │
-│  Scrolling content       │ SS │  HH : MM     │
-│  Date / Day / Message    │    │  Time        │
+│  Zone 0 (modules 0–11)  │ Z1 │ Zone 2 (13–15) │
+│  Scrolling content      │ SS │   HH : MM      │
+│  Date / Day / Message   │    │   Time         │
 └─────────────────────────────────────────────┘
                             ↑
-                        Seconds (zone 1, module 4)
+                        Seconds (zone 1, module 12)
 ```
 
 **Zone 2** (rightmost 3 modules) always shows the current time in HH:MM format using a 7-segment style font.
 
 **Zone 1** (centre module) always shows the current seconds.
 
-**Zone 0** (left 4 modules) scrolls the content for the active page.
+**Zone 0** (left 12 modules) scrolls the content for the active page.
+
+The 3-zone split is defined in `Config.h` and can be adjusted if you want a different balance.
 
 With fewer than 8 modules a two-zone layout is used (no seconds zone).
 
