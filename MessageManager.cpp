@@ -6,7 +6,29 @@
 
 #include "MessageManager.h"
 
+#if defined(ESP8266)
+#include <EEPROM.h>
+#elif defined(ESP32)
 #include <Preferences.h>
+#else
+#error "Select an ESP32 or ESP8266 board."
+#endif
+
+namespace
+{
+#if defined(ESP8266)
+    constexpr uint32_t MessageStorageMagic = 0x4D434C4BUL;
+
+    struct PersistentMessages
+    {
+        uint32_t magic;
+        uint8_t count;
+        char messages[Constants::Limits::MaximumMessages][Constants::Buffer::MessageSize];
+    };
+
+    static_assert(sizeof(PersistentMessages) <= 4096, "Message storage exceeds ESP8266 EEPROM emulation.");
+#endif
+}
 
 
 /******************************************************************************
@@ -285,6 +307,30 @@ const char* MessageManager::get(uint8_t index) const
 
 bool MessageManager::loadFromStorage()
 {
+#if defined(ESP8266)
+    EEPROM.begin(sizeof(PersistentMessages));
+
+    PersistentMessages storage;
+    EEPROM.get(0, storage);
+
+    if (storage.magic != MessageStorageMagic || storage.count == 0 ||
+        storage.count > Constants::Limits::MaximumMessages)
+    {
+        return false;
+    }
+
+    m_count = storage.count;
+    m_current = 0;
+    for (uint8_t i = 0; i < m_count; ++i)
+    {
+        strlcpy(m_messages[i].text, storage.messages[i], sizeof(m_messages[i].text));
+        m_messages[i].enabled = true;
+        m_messages[i].duration = Constants::Message::DefaultDuration;
+        m_messages[i].type = MessageType::Normal;
+    }
+
+    return true;
+#else
     Preferences prefs;
     if (!prefs.begin("matrixclock", true))
     {
@@ -309,10 +355,25 @@ bool MessageManager::loadFromStorage()
 
     prefs.end();
     return count > 0;
+#endif
 }
 
 bool MessageManager::saveToStorage() const
 {
+#if defined(ESP8266)
+    EEPROM.begin(sizeof(PersistentMessages));
+
+    PersistentMessages storage = {};
+    storage.magic = MessageStorageMagic;
+    storage.count = m_count;
+    for (uint8_t i = 0; i < m_count; ++i)
+    {
+        strlcpy(storage.messages[i], m_messages[i].text, sizeof(storage.messages[i]));
+    }
+
+    EEPROM.put(0, storage);
+    return EEPROM.commit();
+#else
     Preferences prefs;
     if (!prefs.begin("matrixclock", false))
     {
@@ -329,4 +390,5 @@ bool MessageManager::saveToStorage() const
 
     prefs.end();
     return true;
+#endif
 }

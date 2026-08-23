@@ -1,6 +1,6 @@
-# ESP32 Matrix Clock Professional
+# ESP32 / ESP8266 Matrix Clock Professional
 
-A modular ESP32 firmware for a MAX7219 LED matrix clock with NTP synchronisation, rotating display pages, scrolling messages, and a browser-based message editor.
+A modular ESP32 and ESP8266 firmware for a MAX7219 LED matrix clock with NTP synchronisation, rotating display pages, scrolling messages, and a browser-based message editor.
 
 ---
 
@@ -23,7 +23,7 @@ A modular ESP32 firmware for a MAX7219 LED matrix clock with NTP synchronisation
 
 ### Controller
 
-ESP32 DevKit (any variant with SPI support)
+ESP32 DevKit (any variant with SPI support) or a Wemos D1 mini / ESP8266 board.
 
 ### Display
 
@@ -31,15 +31,15 @@ MAX7219 FC16 8×8 LED matrix modules — 16 modules recommended for the full thr
 
 ### Wiring
 
-| MAX7219 Pin | ESP32 GPIO |
-|-------------|------------|
-| VCC         | 5 V        |
-| GND         | GND        |
-| DIN         | GPIO 23    |
-| CLK         | GPIO 18    |
-| CS / LOAD   | GPIO 5     |
+| MAX7219 Pin | ESP32 GPIO | D1 mini pin (GPIO) |
+|-------------|------------|--------------------|
+| VCC         | 5 V        | 5 V                |
+| GND         | GND        | GND                |
+| DIN         | GPIO 23    | D7 (GPIO 13)       |
+| CLK         | GPIO 18    | D5 (GPIO 14)       |
+| CS / LOAD   | GPIO 5     | D2 (GPIO 4)        |
 
-Pin assignments are defined in `Config.h` (`Config::Matrix`) and can be changed there.
+Pin assignments are selected automatically in `Config.h` (`Config::Matrix`) and can be changed there. Use a logic-level shifter when a MAX7219 module is powered at 5 V and does not reliably recognize the D1 mini's 3.3 V output.
 
 ---
 
@@ -52,11 +52,10 @@ Install via the Arduino Library Manager:
 | MD_Parola    | Parola text animation engine     |
 | MD_MAX72XX   | MAX7219 hardware driver          |
 
-The following are part of the ESP32 Arduino core and require no separate installation:
+The following are supplied by the selected board core and require no separate installation:
 
-- `WiFi.h`
-- `WebServer.h`
-- `Preferences.h`
+- ESP32: `WiFi.h`, `WebServer.h`, `Preferences.h`
+- ESP8266: `ESP8266WiFi.h`, `ESP8266WebServer.h`, `EEPROM.h`
 - `time.h` / SNTP
 
 ---
@@ -65,10 +64,33 @@ The following are part of the ESP32 Arduino core and require no separate install
 
 1. Open `ESP32_MatrixClock.ino` in Arduino IDE.
 2. Edit `Config.h` — set your Wi-Fi SSID, password, and timezone offset.
-3. Select your ESP32 board and COM port.
+3. Select your ESP32 board or `LOLIN(WEMOS) D1 R2 & mini` and its serial port.
 4. Upload.
 5. Open the Serial Monitor at 115200 baud to see the device IP address.
 6. Navigate to `http://<device-ip>/` in a browser to manage messages.
+
+---
+
+## Board Selection
+
+Do not define `ESP8266` or `ESP32` in `Config.h`. Arduino defines the correct
+platform macro from the board selected for the build, and `Config.h` then chooses
+the matching MAX7219 pins automatically.
+
+In the Arduino IDE, select one of these boards before uploading:
+
+- **ESP8266 D1 mini:** **Tools > Board > ESP8266 Boards > LOLIN(WEMOS) D1 R2 & mini**
+- **ESP32:** **Tools > Board > ESP32 Arduino > ESP32 Dev Module**, or the specific ESP32 board in use
+
+For `arduino-cli` builds, use the corresponding fully qualified board name:
+
+```sh
+# Wemos D1 mini / ESP8266
+arduino-cli compile --fqbn esp8266:esp8266:d1_mini .
+
+# Generic ESP32
+arduino-cli compile --fqbn esp32:esp32:esp32 .
+```
 
 ---
 
@@ -81,7 +103,7 @@ namespace Config
     {
         SSID        // Wi-Fi network name
         PASSWORD    // Wi-Fi password
-        HOSTNAME    // mDNS / DHCP hostname (default: ESP32-MatrixClock)
+        HOSTNAME    // mDNS / DHCP hostname (default: MatrixClock)
     }
 
     namespace Time
@@ -93,9 +115,9 @@ namespace Config
 
     namespace Matrix
     {
-        DataPin   // SPI MOSI — GPIO 23
-        ClockPin  // SPI CLK  — GPIO 18
-        CSPin     // SPI CS   — GPIO 5
+        DataPin   // ESP32 GPIO 23; D1 mini D7 / GPIO 13
+        ClockPin  // ESP32 GPIO 18; D1 mini D5 / GPIO 14
+        CSPin     // ESP32 GPIO 5; D1 mini D2 / GPIO 4
         Devices   // Number of 8×8 modules (default: 16)
     }
 
@@ -163,7 +185,7 @@ Connect to `http://<device-ip>/` on any browser on the same network.
 - **Pin to top** — marks a message as Priority so it always plays before regular messages.
 - **Clear All** — removes every message.
 
-Messages are stored in ESP32 NVS flash and survive power cycles.
+Messages are stored in ESP32 NVS or ESP8266 EEPROM emulation and survive power cycles.
 
 ### Defaults
 

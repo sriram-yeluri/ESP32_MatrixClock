@@ -1,8 +1,7 @@
 #ifndef MESSAGE_WEB_SERVER_H
 #define MESSAGE_WEB_SERVER_H
 
-#include <Arduino.h>
-#include <WebServer.h>
+#include "Platform.h"
 #include "MessageManager.h"
 
 class MessageWebServer
@@ -26,7 +25,7 @@ private:
     void redirectToRoot();
 
     MessageManager& m_messages;
-    WebServer m_server;
+    MatrixClockWebServer m_server;
     bool m_started;
 };
 

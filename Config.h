@@ -22,7 +22,7 @@ namespace WiFi
 {
     constexpr char SSID[] = "VijayKrishna";
     constexpr char PASSWORD[] = "xxxxxxx";
-    constexpr char HOSTNAME[] = "ESP32-MatrixClock";
+    constexpr char HOSTNAME[] = "MatrixClock";
 }
 
 namespace Time
@@ -35,9 +35,18 @@ namespace Time
 
 namespace Matrix
 {
+#if defined(ESP8266)
+    // Wemos D1 mini: D7 (GPIO13), D5 (GPIO14), D2 (GPIO4).
+    constexpr uint8_t DataPin = 13;
+    constexpr uint8_t ClockPin = 14;
+    constexpr uint8_t CSPin = 4;
+#elif defined(ESP32)
     constexpr uint8_t DataPin = 23;
     constexpr uint8_t ClockPin = 18;
     constexpr uint8_t CSPin = 5;
+#else
+#error "Select an ESP32 or ESP8266 board."
+#endif
     constexpr uint8_t Devices = 16;
 
     constexpr uint8_t ThreeZoneDevices = 16;

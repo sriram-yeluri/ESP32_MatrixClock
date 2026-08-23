@@ -7,6 +7,7 @@
 
 
 #include <Arduino.h>
+#include <IPAddress.h>
 
 
 enum class ClockState

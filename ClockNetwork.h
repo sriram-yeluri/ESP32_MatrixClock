@@ -11,13 +11,7 @@
 #define CLOCK_NETWORK_H
 
 
-#include <Arduino.h>
-#include <WiFi.h>
-
-// This bridges old libraries with ESP32 Core 3.x.
-#ifndef wifi_event_id_t
-#define wifi_event_id_t arduino_event_id_t
-#endif
+#include "Platform.h"
 
 #include "Settings.h"
 #include "Types.h"
