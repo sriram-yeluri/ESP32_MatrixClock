@@ -21,7 +21,7 @@ namespace Config
 namespace WiFi
 {
     constexpr char SSID[] = "VijayKrishna";
-    constexpr char PASSWORD[] = "xxxxxxx";
+    constexpr char PASSWORD[] = "Welkome2Guest";
     constexpr char HOSTNAME[] = "MatrixClock";
 }
 

@@ -16,19 +16,13 @@
 #include "Config.h"
 
 
-
 class Settings
 {
 
 public:
 
-
     Settings();
-
-
-
     bool begin();
-
 
 
     /*
@@ -36,11 +30,7 @@ public:
      */
 
     const char* wifiSSID() const;
-
-
     const char* wifiPassword() const;
-
-
 
     /*
      * Device
@@ -49,14 +39,11 @@ public:
     const char* hostname() const;
 
 
-
     /*
      * Time
      */
 
     long timezoneOffset() const;
-
-
     bool is24Hour() const;
 
 
@@ -83,18 +70,13 @@ private:
 
     char m_ssid[64];
 
-
     char m_password[64];
-
 
     char m_hostname[32];
 
-
     long m_timezone;
 
-
     bool m_24Hour;
-
 
     uint8_t m_brightness;
 

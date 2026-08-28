@@ -18,21 +18,16 @@
 #include "Constants.h"
 
 
-
 struct PageConfig
 {
 
     PageType page;
 
-
     bool enabled;
-
 
     uint16_t duration;
 
 };
-
-
 
 
 class PageManager
@@ -40,9 +35,7 @@ class PageManager
 
 public:
 
-
     PageManager();
-
 
 
     /*
@@ -51,12 +44,10 @@ public:
     void begin();
 
 
-
     /*
      * Background update.
      */
     void update();
-
 
 
     /*
@@ -65,12 +56,10 @@ public:
     PageType current() const;
 
 
-
     /*
      * Next page.
      */
     void next();
-
 
 
     /*
@@ -94,29 +83,17 @@ public:
 
 private:
 
-
     void selectNext();
-
-
 
     PageConfig m_pages[
         Constants::Limits::MaximumPages
     ];
 
-
-
     uint8_t m_count;
-
-
     uint8_t m_current;
-
-
     uint32_t m_lastChange;
 
-
-
 };
-
 
 
 #endif
