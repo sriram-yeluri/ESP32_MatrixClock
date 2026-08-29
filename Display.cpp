@@ -49,7 +49,7 @@ m_display(
 void Display::begin()
 {
     const uint8_t deviceCount = Config::Matrix::Devices;
-    const uint8_t zoneCount = (deviceCount >= 8) ? 3 : ((deviceCount >= 2) ? 2 : 1);
+    const uint8_t zoneCount = (deviceCount >= Config::Matrix::ThreeZoneDevices) ? 3 : ((deviceCount >= 2) ? 2 : 1);
 
     m_display.begin(zoneCount);
 
@@ -59,20 +59,22 @@ void Display::begin()
 
     m_display.displayClear();
 
-    if (deviceCount < 2)
+    if (zoneCount == 1)
     {
         m_threeZoneLayout = false;
         m_display.setZone(0, 0, 0);
     }
-    else if (deviceCount >= 8)
+    else if (zoneCount == 3)
     {
         m_threeZoneLayout = true;
 
-        // Exact 3-zone reference layout for 8 modules:
-        // zone0 = 0..3 (scroll content), zone1 = 4..4 (seconds), zone2 = 5..7 (time)
-        m_display.setZone(0, 0, 3);
-        m_display.setZone(1, 4, 4);
-        m_display.setZone(2, 5, 7);
+        const uint8_t leftEnd = Config::Matrix::ThreeZoneScrollDevices - 1;
+        const uint8_t secondsModule = Config::Matrix::ThreeZoneScrollDevices;
+        const uint8_t rightStart = secondsModule + Config::Matrix::ThreeZoneSecondsDevices;
+
+        m_display.setZone(0, 0, leftEnd);
+        m_display.setZone(1, secondsModule, secondsModule);
+        m_display.setZone(2, rightStart, deviceCount - 1);
 
         m_display.setFont(1, const_cast<MD_MAX72XX::fontType_t*>(numeric7Seg));
         m_display.setFont(2, const_cast<MD_MAX72XX::fontType_t*>(numeric7Se));
@@ -114,82 +116,34 @@ void Display::renderZone(
 )
 {
     if (text == nullptr)
-    {
         return;
-    }
 
-    if ((zone == 0 && !m_threeZoneLayout) || (zone == 2 && m_threeZoneLayout))
+    const bool isClockZone   = (zone == 0 && !m_threeZoneLayout) || (zone == 2 && m_threeZoneLayout);
+    const bool isSecondsZone = (zone == 1 && m_threeZoneLayout);
+
+    if (isClockZone)
     {
-        if (strcmp(m_clockText, text) == 0)
-        {
-            return;
-        }
-        strlcpy(m_clockText,text,sizeof(m_clockText));
+        if (strcmp(m_clockText, text) == 0) return;
+        strlcpy(m_clockText, text, sizeof(m_clockText));
     }
-    else if (zone == 1 && m_threeZoneLayout)
+    else if (isSecondsZone)
     {
-        if (strcmp(m_secondsText, text) == 0)
-        {
-            return;
-        }
-        strlcpy(m_secondsText,text,sizeof(m_secondsText));
+        if (strcmp(m_secondsText, text) == 0) return;
+        strlcpy(m_secondsText, text, sizeof(m_secondsText));
     }
     else
     {
-        strlcpy(
-            m_currentText,text,sizeof(m_currentText));
+        strlcpy(m_currentText, text, sizeof(m_currentText));
     }
 
-    if (((zone == 0 || zone == 2) && effect == PA_PRINT) || (zone == 1 && m_threeZoneLayout))
-    {
-        const char* zoneText = m_currentText;
+    const char* zoneText = isClockZone   ? m_clockText
+                         : isSecondsZone ? m_secondsText
+                         : m_currentText;
 
-        if ((zone == 0 && !m_threeZoneLayout) || (zone == 2 && m_threeZoneLayout))
-        {
-            zoneText = m_clockText;
-        }
-        else if (zone == 1 && m_threeZoneLayout)
-        {
-            zoneText = m_secondsText;
-        }
-
-        m_display.displayZoneText(
-            zone,
-            zoneText,
-            position,
-            0,
-            0,
-            PA_PRINT,
-            PA_NO_EFFECT
-        );
-    }
+    if (isClockZone || isSecondsZone || effect == PA_PRINT)
+        m_display.displayZoneText(zone, zoneText, position, 0, 0, PA_PRINT, PA_NO_EFFECT);
     else
-    {
-        if (effect == PA_PRINT)
-        {
-            m_display.displayZoneText(
-                zone,
-                m_currentText,
-                position,
-                0,
-                0,
-                PA_PRINT,
-                PA_NO_EFFECT
-            );
-        }
-        else
-        {
-            m_display.displayZoneText(
-                zone,
-                m_currentText,
-                position,
-                ScrollSpeed,
-                0,
-                effect,
-                effect
-            );
-        }
-    }
+        m_display.displayZoneText(zone, zoneText, position, ScrollSpeed, 0, effect, effect);
 }
 
 
@@ -313,17 +267,8 @@ void Display::showMessage(
     const char* text
 )
 {
-
     renderZone(
-
-        m_threeZoneLayout ? 0 : 1,
-
-        text,
-
-        PA_LEFT,
-
-        PA_SCROLL_LEFT
-
+        m_threeZoneLayout ? 0 : 1,text, PA_LEFT, PA_SCROLL_LEFT
     );
 
 }

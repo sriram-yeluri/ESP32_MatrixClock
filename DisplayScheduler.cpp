@@ -68,11 +68,6 @@ void DisplayScheduler::renderCurrentPage()
     switch (m_pages.current())
     {
         case PageType::Time:
-            m_display.showDate(m_clock.getDate());
-            Serial.print("[Display] Content(Date): ");
-            Serial.println(m_clock.getDate());
-            break;
-
         case PageType::Date:
             m_display.showDate(m_clock.getDate());
             Serial.print("[Display] Content(Date): ");

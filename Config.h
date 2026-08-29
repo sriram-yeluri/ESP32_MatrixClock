@@ -20,8 +20,8 @@ namespace Config
 
 namespace WiFi
 {
-    constexpr char SSID[] = "yeluris";
-    constexpr char PASSWORD[] = "xxx";
+    constexpr char SSID[] = "VijayKrishna";
+    constexpr char PASSWORD[] = "xxxxxxx";
     constexpr char HOSTNAME[] = "ESP32-MatrixClock";
 }
 
@@ -38,7 +38,13 @@ namespace Matrix
     constexpr uint8_t DataPin = 23;
     constexpr uint8_t ClockPin = 18;
     constexpr uint8_t CSPin = 5;
-    constexpr uint8_t Devices = 8;
+    constexpr uint8_t Devices = 16;
+
+    constexpr uint8_t ThreeZoneDevices = 16;
+    constexpr uint8_t ThreeZoneClockDevices = 3;
+    constexpr uint8_t ThreeZoneSecondsDevices = 1;
+    constexpr uint8_t ThreeZoneScrollDevices =
+        ThreeZoneDevices - ThreeZoneClockDevices - ThreeZoneSecondsDevices;
 }
 
 namespace Display
