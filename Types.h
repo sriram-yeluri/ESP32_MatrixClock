@@ -12,20 +12,14 @@
 
 enum class ClockState
 {
-
     Invalid,
-
     Valid
-
 };
-
-
 
 struct ClockStatus
 {
 
     ClockState state;
-
 
     uint8_t hour;
 
@@ -33,14 +27,11 @@ struct ClockStatus
 
     uint8_t second;
 
-
     uint8_t day;
 
     uint8_t month;
 
-
     uint16_t year;
-
 };
 
 
@@ -65,18 +56,13 @@ struct NetworkStatus
 
     NetworkState state;
 
-
     bool connected;
-
 
     bool timeSynced;
 
-
     int32_t rssi;
 
-
     IPAddress ip;
-
 };
 
 
@@ -100,17 +86,12 @@ enum class PageType
 
 };
 
-
-
 enum class MessageType
 {
 
     Normal,
-
     Priority
 
 };
-
-
 
 #endif

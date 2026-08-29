@@ -9,13 +9,9 @@
 Settings::Settings()
 
 :
-m_timezone(
-    Config::Time::TimezoneOffset
-),
+m_timezone(Config::Time::TimezoneOffset),
 
-m_24Hour(
-    true
-),
+m_24Hour(true),
 
 m_brightness(
     Config::Display::DefaultBrightness
@@ -33,7 +29,6 @@ m_brightness(
         0,
         sizeof(m_password)
     );
-
 
     memset(
         m_hostname,

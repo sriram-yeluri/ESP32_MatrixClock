@@ -67,7 +67,6 @@ public:
 
 private:
 
-
     char m_ssid[64];
 
     char m_password[64];

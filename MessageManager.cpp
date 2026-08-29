@@ -63,7 +63,7 @@ void MessageManager::begin()
         add("VijayKrishnaSai is a smart kid",5);
         add("Vishwateja is a naughty kid", 5);
         add("Devaki Devi is the Queen of our House", 5);
-        add(" Jai Sri Ram *** Jai Sri Ram *** Jai Sri Ram", 5);
+        add("Jai Sri Ram *** Jai Sri Ram *** Jai Sri Ram", 5);
         saveToStorage();
     }
 
@@ -83,7 +83,6 @@ void MessageManager::update()
     // The application advances to the next message only when the
     // Message page becomes active.
 }
-
 
 
 /******************************************************************************
@@ -168,37 +167,20 @@ bool MessageManager::add(
 )
 {
 
-    if(
-        m_count >=
-        Constants::Limits::MaximumMessages
-    )
+    if(m_count >=Constants::Limits::MaximumMessages)
     {
         return false;
     }
 
+    DisplayMessage& msg = m_messages[m_count];
 
-    DisplayMessage& msg =
-        m_messages[m_count];
+    strlcpy(msg.text,text,sizeof(msg.text));
 
+    msg.enabled =true;
 
-    strlcpy(
+    msg.duration = seconds;
 
-        msg.text,
-
-        text,
-
-        sizeof(msg.text)
-
-    );
-
-    msg.enabled =
-        true;
-
-    msg.duration =
-        seconds;
-
-    msg.type =
-        MessageType::Normal;
+    msg.type = MessageType::Normal;
 
     m_count++;
     saveToStorage();
@@ -213,17 +195,12 @@ bool MessageManager::add(
 
 void MessageManager::clear()
 {
+             
+    m_count = 0;
 
-    m_count =
-        0;
+    m_current = 0;
 
-
-    m_current =
-        0;
-
-
-    m_lastChange =
-        0;
+    m_lastChange = 0;
 
     saveToStorage();
 }

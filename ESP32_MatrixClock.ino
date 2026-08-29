@@ -90,9 +90,7 @@ void setup()
     webServer.begin();
     pages.begin();
 
-    Serial.println(
-        "System Ready"
-    );
+    Serial.println("System Ready");
 
 }
 

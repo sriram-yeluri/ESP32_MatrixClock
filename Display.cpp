@@ -245,18 +245,11 @@ void Display::showDay(
 
     renderZone(
 
-        m_threeZoneLayout ? 0 : 1,
-
-        text,
-
-        PA_LEFT,
-
-        PA_SCROLL_LEFT
+        m_threeZoneLayout ? 0 : 1, text, PA_LEFT, PA_SCROLL_LEFT
 
     );
 
 }
-
 
 
 /******************************************************************************
@@ -279,29 +272,14 @@ void Display::showMessage(
  * Brightness
  ******************************************************************************/
 
-void Display::setBrightness(
-    uint8_t value
-)
+void Display::setBrightness(uint8_t value)
 {
-
-    if(
-        value >
-        Constants::Limits::MaximumBrightness
-    )
+    if(value >Constants::Limits::MaximumBrightness)
     {
-
-        value =
-            Constants::Limits::MaximumBrightness;
-
+        value = Constants::Limits::MaximumBrightness;
     }
-
-    m_brightness =
-        value;
-
-    m_display.setIntensity(
-        value
-    );
-
+    m_brightness = value;
+    m_display.setIntensity(value);
 }
 
 /******************************************************************************
@@ -322,35 +300,10 @@ void Display::clear()
 
     m_display.displayClear();
 
+    memset(m_currentText,0,sizeof(m_currentText));
 
-    memset(
+    memset(m_clockText, 0, sizeof(m_clockText));
 
-        m_currentText,
-
-        0,
-
-        sizeof(m_currentText)
-
-    );
-
-    memset(
-
-        m_clockText,
-
-        0,
-
-        sizeof(m_clockText)
-
-    );
-
-    memset(
-
-        m_secondsText,
-
-        0,
-
-        sizeof(m_secondsText)
-
-    );
+    memset( m_secondsText, 0, sizeof(m_secondsText));
 
 }

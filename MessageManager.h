@@ -26,15 +26,11 @@ struct DisplayMessage
         Constants::Buffer::MessageSize
     ];
 
-
     bool enabled;
-
 
     uint16_t duration;
 
-
     MessageType type;
-
 };
 
 
