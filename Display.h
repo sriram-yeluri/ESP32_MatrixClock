@@ -80,7 +80,7 @@ public:
 
 
     /*
-     * Brightness.
+     * Brightness and motion.
      */
 
     void setBrightness(
@@ -88,6 +88,12 @@ public:
     );
 
     uint8_t brightness() const;
+
+    void setScrollSpeed(
+       uint16_t value
+    );
+
+    uint16_t scrollSpeed() const;
 
 
 
@@ -127,6 +133,8 @@ private:
     bool m_threeZoneLayout;
 
     uint8_t m_brightness;
+
+    uint16_t m_scrollSpeed;
 
 };
 

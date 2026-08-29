@@ -67,6 +67,12 @@ public:
 
     uint8_t brightness() const;
 
+    void setBrightness(uint8_t value);
+
+    uint16_t scrollSpeed() const;
+
+    void setScrollSpeed(uint16_t value);
+
 
 
     /*
@@ -97,6 +103,8 @@ private:
 
 
     uint8_t m_brightness;
+
+    uint16_t m_scrollSpeed;
 
 };
 

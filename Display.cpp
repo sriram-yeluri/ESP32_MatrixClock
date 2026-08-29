@@ -7,12 +7,6 @@
 #include "Display.h"
 #include "Font_Data.h"
 
-namespace
-{
-    constexpr uint16_t ScrollSpeed = Constants::Display::DefaultScrollSpeed;
-}
-
-
 /******************************************************************************
  * Constructor
  ******************************************************************************/
@@ -39,6 +33,7 @@ m_display(
     m_threeZoneLayout = false;
 
     m_brightness = m_settings.brightness();
+    m_scrollSpeed = m_settings.scrollSpeed();
 
 }
 

@@ -50,6 +50,7 @@ namespace Matrix
 namespace Display
 {
     constexpr uint8_t DefaultBrightness = 3;
+    constexpr uint16_t DefaultScrollSpeed = 65;
 }
 
 

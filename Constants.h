@@ -57,6 +57,12 @@ namespace Display
 constexpr uint16_t DefaultScrollSpeed =
     65;
 
+constexpr uint16_t MinimumScrollSpeed =
+    20;
+
+constexpr uint16_t MaximumScrollSpeed =
+    200;
+
 }
 
 
