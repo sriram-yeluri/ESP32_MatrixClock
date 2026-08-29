@@ -77,8 +77,6 @@ void ClockNetwork::startAccessPoint()
     Serial.println(apIP);
 }
 
-
-
 void ClockNetwork::update()
 {
     uint32_t now = millis();

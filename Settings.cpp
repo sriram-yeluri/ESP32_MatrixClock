@@ -22,13 +22,11 @@ m_brightness(
 )
 
 {
-
     memset(
         m_ssid,
         0,
         sizeof(m_ssid)
     );
-
 
     memset(
         m_password,
@@ -44,8 +42,6 @@ m_brightness(
     );
 
 }
-
-
 
 /******************************************************************************
  * Load Settings
@@ -62,13 +58,11 @@ bool Settings::begin()
      * Load from ESP32 Preferences
      */
 
-
     strlcpy(
         m_ssid,
         Config::WiFi::SSID,
         sizeof(m_ssid)
     );
-
 
     strlcpy(
         m_password,
@@ -76,18 +70,15 @@ bool Settings::begin()
         sizeof(m_password)
     );
 
-
     strlcpy(
         m_hostname,
         Config::WiFi::HOSTNAME,
         sizeof(m_hostname)
     );
 
-
     return true;
 
 }
-
 
 
 /******************************************************************************
@@ -99,14 +90,10 @@ const char* Settings::wifiSSID() const
     return m_ssid;
 }
 
-
-
 const char* Settings::wifiPassword() const
 {
     return m_password;
 }
-
-
 
 /******************************************************************************
  * Device
@@ -117,8 +104,6 @@ const char* Settings::hostname() const
     return m_hostname;
 }
 
-
-
 /******************************************************************************
  * Time
  ******************************************************************************/
@@ -128,14 +113,10 @@ long Settings::timezoneOffset() const
     return m_timezone;
 }
 
-
-
 bool Settings::is24Hour() const
 {
     return m_24Hour;
 }
-
-
 
 /******************************************************************************
  * Display
@@ -145,8 +126,6 @@ uint8_t Settings::brightness() const
 {
     return m_brightness;
 }
-
-
 
 /******************************************************************************
  * Save Placeholder
@@ -163,8 +142,5 @@ bool Settings::save()
      * prefs.begin("clock");
      *
      */
-
-
     return true;
-
 }

@@ -5,9 +5,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-
 #include <Arduino.h>
-
 
 namespace Constants
 {
@@ -46,6 +44,5 @@ namespace Constants
     }
 
 }
-
 
 #endif

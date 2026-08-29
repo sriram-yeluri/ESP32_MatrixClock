@@ -26,7 +26,6 @@ class ClockNetwork
 public:
     explicit ClockNetwork(Settings& settings);
 
-
     /*
      * Initialize network.
      */
