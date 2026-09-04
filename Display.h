@@ -29,11 +29,7 @@ class Display
 
 public:
 
-
-    explicit Display(
-        Settings& settings
-    );
-
+    explicit Display(Settings& settings);
 
 
     /*
@@ -54,30 +50,15 @@ public:
      * Display content.
      */
 
-    void showTime(
-        const char* text
-    );
+    void showTime(const char* text);
 
+    void showSeconds(const char* text);
 
-    void showSeconds(
-        const char* text
-    );
+    void showDate(const char* text);
 
+    void showDay( const char* text);
 
-    void showDate(
-        const char* text
-    );
-
-
-    void showDay(
-        const char* text
-    );
-
-
-    void showMessage(
-        const char* text
-    );
-
+    void showMessage(const char* text);
 
     void showPacMan();
 
@@ -86,12 +67,9 @@ public:
      * Brightness.
      */
 
-    void setBrightness(
-        uint8_t value
-    );
+    void setBrightness(uint8_t value);
 
     uint8_t brightness() const;
-
 
 
     /*
@@ -115,17 +93,11 @@ private:
 
     MD_Parola m_display;
 
-    char m_currentText[
-        Constants::Buffer::MessageSize
-    ];
+    char m_currentText[Constants::Buffer::MessageSize];
 
-    char m_clockText[
-        Constants::Buffer::TimeSize
-    ];
+    char m_clockText[Constants::Buffer::TimeSize];
 
-    char m_secondsText[
-        8
-    ];
+    char m_secondsText[8];
 
     bool m_threeZoneLayout;
 
