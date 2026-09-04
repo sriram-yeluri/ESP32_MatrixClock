@@ -40,6 +40,18 @@ namespace
     // Custom Dot Trail String
     // We use spaces to space out the pellets cleanly across the 16 matrices
     const char PacManDotTrail[] = " .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . ";
+
+    // Define Heart animation sprite data (8 columns wide per frame)
+    const uint8_t HEART_FRAMES = 2;
+    const uint8_t HEART_WIDTH = 8;
+    const uint8_t PROGMEM beatingHeart[HEART_FRAMES * HEART_WIDTH] =
+    {
+        // Frame 1: Large Heart
+        0x0C, 0x1E, 0x3E, 0x7C, 0x7C, 0x3E, 0x1E, 0x0C,
+        
+        // Frame 2: Small Heart
+        0x00, 0x0C, 0x1E, 0x3C, 0x3C, 0x1E, 0x0C, 0x00
+    };
 }
 
 
@@ -312,6 +324,35 @@ void Display::showPacMan()
     );
 }
 
+
+/******************************************************************************
+ * Beating Heart animation
+ ******************************************************************************/
+
+void Display::showBeatingHeart()
+{
+    const uint8_t zone = m_threeZoneLayout ? 0 : 1;
+
+    // Bind the beating heart frames to the library's sprite configuration
+    m_display.setSpriteData(
+        beatingHeart,
+        HEART_WIDTH, 
+        HEART_FRAMES, 
+        beatingHeart, 
+        HEART_WIDTH, 
+        HEART_FRAMES
+    );
+
+    m_display.displayZoneText(
+        zone,
+        "",
+        PA_LEFT,
+        80,
+        0,
+        PA_SPRITE,
+        PA_SPRITE
+    );
+}
 
 
 /******************************************************************************

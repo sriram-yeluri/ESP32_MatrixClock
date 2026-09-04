@@ -88,6 +88,17 @@ void PageManager::begin()
 
     };
 
+    m_pages[m_count++] =
+    {
+
+        PageType::BeatingHeart,
+
+        true,
+
+        15
+
+    };
+
     /*
      * Future pages
      */

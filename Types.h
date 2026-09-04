@@ -93,6 +93,8 @@ enum class PageType
 
     PacMan,
 
+    BeatingHeart,
+
     Version,
 
     WiFi,

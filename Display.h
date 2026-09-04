@@ -62,6 +62,8 @@ public:
 
     void showPacMan();
 
+    void showBeatingHeart();
+
 
     /*
      * Brightness.

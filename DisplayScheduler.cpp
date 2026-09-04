@@ -12,6 +12,7 @@ const char* pageName(PageType page)
         case PageType::Day: return "Day";
         case PageType::Message: return "Message";
         case PageType::PacMan: return "PacMan";
+        case PageType::BeatingHeart: return "BeatingHeart";
         case PageType::Version: return "Version";
         case PageType::WiFi: return "WiFi";
         case PageType::IP: return "IP";
@@ -89,6 +90,10 @@ void DisplayScheduler::renderCurrentPage()
 
         case PageType::PacMan:
             m_display.showPacMan();
+            break;
+
+        case PageType::BeatingHeart:
+            m_display.showBeatingHeart();
             break;
 
         default:
