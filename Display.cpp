@@ -83,9 +83,7 @@ void Display::begin()
 
     m_display.begin(zoneCount);
 
-    m_display.setIntensity(
-        m_brightness
-    );
+    m_display.setIntensity(m_brightness);
 
     m_display.displayClear();
 
@@ -170,7 +168,7 @@ void Display::renderZone(
                          : isSecondsZone ? m_secondsText
                          : m_currentText;
 
-    if (isClockZone || isSecondsZone || effect == PA_PRINT)
+    if ((isClockZone || isSecondsZone) && effect == PA_PRINT)
         m_display.displayZoneText(zone, zoneText, position, 0, 0, PA_PRINT, PA_NO_EFFECT);
     else
         m_display.displayZoneText(zone, zoneText, position, ScrollSpeed, 0, effect, effect);
@@ -250,7 +248,7 @@ void Display::showSeconds(const char* text)
 
     char secondsText[4];
     snprintf(secondsText, sizeof(secondsText), "%c %c", s0, s1);
-    renderZone(1, secondsText, PA_LEFT, PA_PRINT);
+    renderZone(1, secondsText, PA_LEFT, PA_GROW_DOWN);
 }
 
 
@@ -261,6 +259,7 @@ void Display::showSeconds(const char* text)
 void Display::showDate(const char* text)
 {
     renderZone(m_threeZoneLayout ? 0 : 1, text, PA_LEFT, PA_SCROLL_LEFT);
+    // renderZone(m_threeZoneLayout ? 0 : 1, text, PA_CENTER, PA_MESH);
 }
 
 

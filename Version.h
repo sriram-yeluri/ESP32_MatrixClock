@@ -15,19 +15,11 @@
 namespace Version
 {
 
+    constexpr char Name[] = "ESP32 Matrix Clock Professional";
 
-constexpr char Name[] =
-    "ESP32 Matrix Clock Professional";
+    constexpr char Number[] = "2.0.0";
 
-
-constexpr char Number[] =
-    "2.0.0";
-
-
-constexpr char Build[] =
-    __DATE__ " " __TIME__;
-
-
+    constexpr char Build[] = __DATE__ " " __TIME__;
 
 }
 
