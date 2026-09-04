@@ -10,6 +10,30 @@
 namespace
 {
     constexpr uint16_t ScrollSpeed = Constants::Display::DefaultScrollSpeed;
+
+    constexpr uint8_t PacManFrames = 4;
+    constexpr uint8_t PacManFrameWidth = 20;
+
+    const uint8_t PacManGhostCombo[PacManFrames * PacManFrameWidth] PROGMEM =
+    {
+        0x1c, 0x3e, 0x7a, 0x7d, 0x7d, 0x7a, 0x3e, 0x1c,
+        0x00, 0x00, 0x00, 0x00,
+        0x3c, 0x7e, 0xff, 0xff, 0xff, 0xff, 0x7e, 0x3c,
+
+        0x3c, 0x7e, 0x5a, 0x7d, 0x7d, 0x5a, 0x7e, 0x3c,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x42, 0xe7, 0xe7, 0xff, 0xff, 0x7e, 0x3c,
+
+        0x1c, 0x3e, 0x7a, 0x7d, 0x7d, 0x7a, 0x3e, 0x1c,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x81, 0xc3, 0xe7, 0xff, 0x7e, 0x7e, 0x3c,
+
+        0x3c, 0x7e, 0x5a, 0x7d, 0x7d, 0x5a, 0x7e, 0x3c,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x42, 0xe7, 0xe7, 0xff, 0xff, 0x7e, 0x3c
+    };
+
+    const char PacManDotTrail[] = " .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . ";
 }
 
 
@@ -238,23 +262,9 @@ void Display::showDate(const char* text)
  * Day
  ******************************************************************************/
 
-void Display::showDay(
-    const char* text
-)
+void Display::showDay(const char* text)
 {
-
-    renderZone(
-
-        m_threeZoneLayout ? 0 : 1,
-
-        text,
-
-        PA_LEFT,
-
-        PA_SCROLL_LEFT
-
-    );
-
+    renderZone(m_threeZoneLayout ? 0 : 1,text,PA_LEFT,PA_SCROLL_LEFT);
 }
 
 
@@ -263,14 +273,38 @@ void Display::showDay(
  * Message
  ******************************************************************************/
 
-void Display::showMessage(
-    const char* text
-)
+void Display::showMessage(const char* text)
 {
-    renderZone(
-        m_threeZoneLayout ? 0 : 1,text, PA_LEFT, PA_SCROLL_LEFT
+    renderZone(m_threeZoneLayout ? 0 : 1,text, PA_LEFT, PA_SCROLL_LEFT );
+
+}
+
+/******************************************************************************
+ * Pac-Man animation
+ ******************************************************************************/
+
+void Display::showPacMan()
+{
+    const uint8_t zone = m_threeZoneLayout ? 0 : 1;
+
+    m_display.setSpriteData(
+        PacManGhostCombo,
+        PacManFrameWidth,
+        PacManFrames,
+        PacManGhostCombo,
+        PacManFrameWidth,
+        PacManFrames
     );
 
+    m_display.displayZoneText(
+        zone,
+        PacManDotTrail,
+        PA_LEFT,
+        ScrollSpeed,
+        0,
+        PA_SPRITE,
+        PA_SPRITE
+    );
 }
 
 
@@ -279,29 +313,15 @@ void Display::showMessage(
  * Brightness
  ******************************************************************************/
 
-void Display::setBrightness(
-    uint8_t value
-)
+void Display::setBrightness(uint8_t value)
 {
 
-    if(
-        value >
-        Constants::Limits::MaximumBrightness
-    )
+    if(value >Constants::Limits::MaximumBrightness)
     {
-
-        value =
-            Constants::Limits::MaximumBrightness;
-
+        value = Constants::Limits::MaximumBrightness;
     }
-
-    m_brightness =
-        value;
-
-    m_display.setIntensity(
-        value
-    );
-
+    m_brightness =value;
+    m_display.setIntensity(value);
 }
 
 /******************************************************************************
@@ -322,35 +342,10 @@ void Display::clear()
 
     m_display.displayClear();
 
+    memset(m_currentText,0,sizeof(m_currentText));
 
-    memset(
+    memset(m_clockText,0,sizeof(m_clockText));
 
-        m_currentText,
-
-        0,
-
-        sizeof(m_currentText)
-
-    );
-
-    memset(
-
-        m_clockText,
-
-        0,
-
-        sizeof(m_clockText)
-
-    );
-
-    memset(
-
-        m_secondsText,
-
-        0,
-
-        sizeof(m_secondsText)
-
-    );
+    memset(m_secondsText,0,sizeof(m_secondsText));
 
 }

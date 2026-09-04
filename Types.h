@@ -91,6 +91,8 @@ enum class PageType
 
     Message,
 
+    PacMan,
+
     Version,
 
     WiFi,

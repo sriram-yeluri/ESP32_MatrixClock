@@ -21,20 +21,10 @@
 
 struct DisplayMessage
 {
-
-    char text[
-        Constants::Buffer::MessageSize
-    ];
-
-
+    char text[Constants::Buffer::MessageSize];
     bool enabled;
-
-
     uint16_t duration;
-
-
     MessageType type;
-
 };
 
 
@@ -74,8 +64,7 @@ public:
 
         const char* text,
 
-        uint16_t seconds =
-            Constants::Message::DefaultDuration
+        uint16_t seconds = Constants::Message::DefaultDuration
 
     );
 

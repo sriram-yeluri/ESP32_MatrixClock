@@ -11,6 +11,7 @@ const char* pageName(PageType page)
         case PageType::Date: return "Date";
         case PageType::Day: return "Day";
         case PageType::Message: return "Message";
+        case PageType::PacMan: return "PacMan";
         case PageType::Version: return "Version";
         case PageType::WiFi: return "WiFi";
         case PageType::IP: return "IP";
@@ -84,6 +85,10 @@ void DisplayScheduler::renderCurrentPage()
             m_display.showMessage(m_messages.current());
             Serial.print("[Display] Content(Message): ");
             Serial.println(m_messages.current());
+            break;
+
+        case PageType::PacMan:
+            m_display.showPacMan();
             break;
 
         default:

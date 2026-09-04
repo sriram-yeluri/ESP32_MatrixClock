@@ -77,6 +77,17 @@ void PageManager::begin()
 
     };
 
+    m_pages[m_count++] =
+    {
+
+        PageType::PacMan,
+
+        true,
+
+        15
+
+    };
+
     /*
      * Future pages
      */
@@ -115,32 +126,18 @@ void PageManager::begin()
 void PageManager::update()
 {
 
-    if(
-        m_count == 0
-    )
+    if(m_count == 0)
     {
         return;
     }
 
-    uint32_t now =
-        millis();
+    uint32_t now = millis();
 
-    if(
-
-        now - m_lastChange
-
-        >=
-
-        m_pages[m_current].duration * 1000UL
-
-    )
+    if(now - m_lastChange >= m_pages[m_current].duration * 1000UL)
     {
 
         next();
-
-
-        m_lastChange =
-            now;
+        m_lastChange = now;
 
     }
 
@@ -170,9 +167,7 @@ void PageManager::next()
 
     selectNext();
 
-
-    m_lastChange =
-        millis();
+    m_lastChange = millis();
 
 }
 
@@ -183,37 +178,22 @@ void PageManager::next()
 void PageManager::selectNext()
 {
 
-    if(
-        m_count == 0
-    )
+    if(m_count == 0)
     {
         return;
     }
 
-    for(
-        uint8_t i = 0;
-
-        i < m_count;
-
-        i++
-    )
+    for(uint8_t i = 0;i < m_count;i++)
     {
 
         m_current++;
 
-
-        if(
-            m_current >= m_count
-        )
+        if(m_current >= m_count)
         {
-
             m_current = 0;
-
         }
 
-        if(
-            m_pages[m_current].enabled
-        )
+        if(m_pages[m_current].enabled)
         {
             break;
         }
@@ -228,35 +208,17 @@ void PageManager::selectNext()
  * Select page
  ******************************************************************************/
 
-void PageManager::set(
-    PageType page
-)
+void PageManager::set(PageType page)
 {
 
-    for(
-        uint8_t i = 0;
-
-        i < m_count;
-
-        i++
-    )
+    for(uint8_t i = 0; i < m_count;i++)
     {
 
-        if(
-            m_pages[i].page == page
-        )
+        if(m_pages[i].page == page)
         {
-
-            m_current =
-                i;
-
-
-            m_lastChange =
-                millis();
-
-
+            m_current = i;
+            m_lastChange =millis();
             return;
-
         }
 
     }
@@ -269,44 +231,22 @@ void PageManager::set(
  * Enable Page
  ******************************************************************************/
 
-void PageManager::enable(
-
-    PageType page,
-
-    bool state
-
-)
+void PageManager::enable(PageType page,bool state)
 {
 
-    for(
-        uint8_t i = 0;
-
-        i < m_count;
-
-        i++
-    )
+    for(uint8_t i = 0;i < m_count;i++)
     {
 
-        if(
-            m_pages[i].page == page
-        )
+        if(m_pages[i].page == page)
         {
 
-            m_pages[i].enabled =
-                state;
+            m_pages[i].enabled = state;
 
-
-            if(
-                !state
-                &&
-                i == m_current
-            )
+            if(!state && i == m_current)
             {
                 selectNext();
-                m_lastChange =
-                    millis();
+                m_lastChange = millis();
             }
-
 
             return;
 

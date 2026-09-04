@@ -9,6 +9,7 @@ A modular ESP32 firmware for a MAX7219 LED matrix clock with NTP synchronisation
 - NTP-synchronised clock (24-hour or 12-hour)
 - Three-zone display layout: scrolling content · seconds · time
 - Rotating pages: Time, Date, Day of Week, Custom Messages
+- Pac-Man and Blinky chase animation
 - Up to 10 custom scrolling messages with configurable duration
 - Priority (pinned) messages that display before regular messages
 - Browser-based message editor served over Wi-Fi
@@ -144,6 +145,7 @@ The `PageManager` cycles through enabled pages. Each page has a configurable dis
 | Date    | Current date            | 10 s             |
 | Day     | Day of the week         | 10 s             |
 | Message | Next custom message     | 15 s             |
+| Pac-Man | Pac-Man and Blinky      | 15 s             |
 | Version | Firmware version string | disabled         |
 | WiFi    | Connection status       | disabled         |
 
